@@ -1,5 +1,6 @@
 package net.java.realEstate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -23,10 +24,14 @@ public class Tenant {
 
     @NotNull(message = "Contact number cannot be null")
     @Column(name = "contact_number")
-    private long contactNumber;
+    private Long contactNumber;  // Changed from long to Long to allow null
 
     @NotNull(message = "Password cannot be null")
     private String password;
+
+    @Transient  // This annotation ensures the field is not mapped to a database column
+    @JsonIgnore  // Prevents oldPassword from being included in the response
+    private String oldPassword;  // For password update validation
 
     // Getters and Setters
     public int getId() {
@@ -53,11 +58,11 @@ public class Tenant {
         this.email = email;
     }
 
-    public long getContactNumber() {
+    public Long getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(long contactNumber) {
+    public void setContactNumber(Long contactNumber) {
         this.contactNumber = contactNumber;
     }
 
@@ -67,5 +72,13 @@ public class Tenant {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }
